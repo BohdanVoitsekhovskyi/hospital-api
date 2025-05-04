@@ -17,19 +17,19 @@ public class Doctor {
     private Integer id;
 
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
     @ColumnDefault("nextval('doctors_doctor_id_seq')")
     @JoinColumn(name = "doctor_id", nullable = false)
     private User users;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "specialization_id")
     private Specialization specialization;
 
     @Column(name = "rating")
     private Double rating;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
 

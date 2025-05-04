@@ -63,7 +63,7 @@ const AppointmentService = {
   getDoctors: async () => {
     try {
       // Make the API call to get available doctors
-      const response = await axios.get(`${API_URL}/doctors`);
+      const response = await axios.get('/api/doctors');
       return response.data;
     } catch (error) {
       console.error('Error fetching doctors:', error);

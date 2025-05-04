@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Tabs, Tab } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AuthService from '../services/AuthService';
-import AppointmentForm from '../components/AppointmentForm';
 import AppointmentList from '../components/AppointmentList';
+import DoctorList from '../components/DoctorList';
+import DoctorDetails from '../components/DoctorDetails';
+import MedcardForm from '../components/MedcardForm';
+import UserProfileForm from '../components/UserProfileForm';
 
 const PatientDashboard = () => {
   const [user, setUser] = useState(null);
-  const [activeTab, setActiveTab] = useState('makeAppointment');
+  const [activeTab, setActiveTab] = useState('doctors');
+  const [selectedDoctorId, setSelectedDoctorId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,13 +65,25 @@ const PatientDashboard = () => {
         <Col>
           <Tabs
             activeKey={activeTab}
-            onSelect={(k) => setActiveTab(k)}
+            onSelect={(k) => {
+              setActiveTab(k);
+              if (k !== 'doctors') {
+                setSelectedDoctorId(null);
+              }
+            }}
             className="mb-3"
           >
-            <Tab eventKey="makeAppointment" title="Make Appointment">
+            <Tab eventKey="doctors" title="Find Doctors">
               <Card>
                 <Card.Body>
-                  <AppointmentForm />
+                  {selectedDoctorId ? (
+                    <DoctorDetails 
+                      doctorId={selectedDoctorId} 
+                      onBack={() => setSelectedDoctorId(null)} 
+                    />
+                  ) : (
+                    <DoctorList onSelectDoctor={(id) => setSelectedDoctorId(id)} />
+                  )}
                 </Card.Body>
               </Card>
             </Tab>
@@ -75,6 +91,20 @@ const PatientDashboard = () => {
               <Card>
                 <Card.Body>
                   <AppointmentList />
+                </Card.Body>
+              </Card>
+            </Tab>
+            <Tab eventKey="medcard" title="Medical Card">
+              <Card>
+                <Card.Body>
+                  <MedcardForm />
+                </Card.Body>
+              </Card>
+            </Tab>
+            <Tab eventKey="profile" title="Edit Profile">
+              <Card>
+                <Card.Body>
+                  <UserProfileForm />
                 </Card.Body>
               </Card>
             </Tab>

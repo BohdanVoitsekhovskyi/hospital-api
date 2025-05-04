@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AuthService from '../services/AuthService';
+import UserProfileForm from '../components/UserProfileForm';
 
 const DoctorDashboard = () => {
   const [user, setUser] = useState(null);
@@ -54,13 +55,24 @@ const DoctorDashboard = () => {
         </Col>
       </Row>
 
-      <Row>
+      <Row className="mb-4">
         <Col>
           <Card>
             <Card.Body>
               <h3>Your Schedule</h3>
               <p>This is where you'll see your upcoming appointments and schedule.</p>
               <p className="text-muted">Coming soon: Calendar view with appointments.</p>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+          <Card>
+            <Card.Body>
+              <h3>Edit Profile</h3>
+              <UserProfileForm />
             </Card.Body>
           </Card>
         </Col>

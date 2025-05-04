@@ -18,7 +18,7 @@ public class Hospital {
     @Column(name = "hospital_name", length = Integer.MAX_VALUE)
     private String hospitalName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
     private Address address;
 

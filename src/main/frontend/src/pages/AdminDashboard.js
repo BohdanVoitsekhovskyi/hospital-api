@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Tabs, Tab } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AuthService from '../services/AuthService';
+import DoctorForm from '../components/DoctorForm';
+import UserProfileForm from '../components/UserProfileForm';
 
 const AdminDashboard = () => {
   const [user, setUser] = useState(null);
+  const [activeTab, setActiveTab] = useState('doctors');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,13 +59,50 @@ const AdminDashboard = () => {
 
       <Row>
         <Col>
-          <Card>
-            <Card.Body>
-              <h3>System Management</h3>
-              <p>This is where you'll manage doctors, patients, and appointments.</p>
-              <p className="text-muted">Coming soon: Management tools for hospital administration.</p>
-            </Card.Body>
-          </Card>
+          <Tabs
+            activeKey={activeTab}
+            onSelect={(k) => setActiveTab(k)}
+            className="mb-3"
+          >
+            <Tab eventKey="doctors" title="Manage Doctors">
+              <Card>
+                <Card.Body>
+                  <DoctorForm />
+                </Card.Body>
+              </Card>
+            </Tab>
+            <Tab eventKey="patients" title="Manage Patients">
+              <Card>
+                <Card.Body>
+                  <h3>Patient Management</h3>
+                  <p className="text-muted">Coming soon: Tools for managing patients.</p>
+                </Card.Body>
+              </Card>
+            </Tab>
+            <Tab eventKey="appointments" title="Manage Appointments">
+              <Card>
+                <Card.Body>
+                  <h3>Appointment Management</h3>
+                  <p className="text-muted">Coming soon: Tools for managing appointments.</p>
+                </Card.Body>
+              </Card>
+            </Tab>
+            <Tab eventKey="hospitals" title="Manage Hospitals">
+              <Card>
+                <Card.Body>
+                  <h3>Hospital Management</h3>
+                  <p className="text-muted">Coming soon: Tools for managing hospitals.</p>
+                </Card.Body>
+              </Card>
+            </Tab>
+            <Tab eventKey="profile" title="Edit Profile">
+              <Card>
+                <Card.Body>
+                  <UserProfileForm />
+                </Card.Body>
+              </Card>
+            </Tab>
+          </Tabs>
         </Col>
       </Row>
     </Container>

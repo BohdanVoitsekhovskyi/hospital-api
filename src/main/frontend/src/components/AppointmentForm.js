@@ -3,13 +3,13 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import AuthService from '../services/AuthService';
 import AppointmentService from '../services/AppointmentService';
 
-const AppointmentForm = () => {
+const AppointmentForm = ({ preselectedDoctorId }) => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [formData, setFormData] = useState({
-    doctorId: '',
+    doctorId: preselectedDoctorId || '',
     date: '',
     time: '',
     reason: ''
@@ -47,8 +47,8 @@ const AppointmentForm = () => {
       // Create appointment data object with doctor details
       const appointmentData = {
         ...formData,
-        doctorName: selectedDoctor ? selectedDoctor.name : '',
-        specialization: selectedDoctor ? selectedDoctor.specialization : ''
+        doctorName: selectedDoctor ? `${selectedDoctor.users.name} ${selectedDoctor.users.surname}` : '',
+        specialization: selectedDoctor ? selectedDoctor.specialization.specializationName : ''
       };
 
       // Create the appointment using the service
@@ -85,7 +85,7 @@ const AppointmentForm = () => {
             <option value="">-- Select a doctor --</option>
             {doctors.map(doctor => (
               <option key={doctor.id} value={doctor.id}>
-                {doctor.name} - {doctor.specialization}
+                {doctor.users.name} {doctor.users.surname} - {doctor.specialization.specializationName}
               </option>
             ))}
           </Form.Select>

@@ -1,10 +1,14 @@
 package com.example.demo.services.implemantation;
 
+import com.example.demo.dao.AddressRepository;
 import com.example.demo.dao.DoctorRepository;
-
+import com.example.demo.dao.HospitalRepository;
+import com.example.demo.dao.SpecializationRepository;
 import com.example.demo.dto.DoctorDTO;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entities.Doctor;
+import com.example.demo.entities.Hospital;
+import com.example.demo.entities.Specialization;
 import com.example.demo.services.AuthService;
 import com.example.demo.services.DoctorService;
 import com.example.demo.services.UserService;
@@ -19,6 +23,9 @@ import java.util.List;
 public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;
+    private final SpecializationRepository specializationRepository;
+    private final AddressRepository addressRepository;
+    private final HospitalRepository hospitalRepository;
     private final AuthService authService;
 
     @Transactional
@@ -40,5 +47,38 @@ public class DoctorServiceImpl implements DoctorService {
          doctorRepository.deleteById(id);
     }
 
+    @Override
+    public List<Doctor> findAllDoctors() {
+        return doctorRepository.findAll();
+    }
 
+    @Override
+    public List<Doctor> findDoctorsByFilters(Integer specializationId, Double minRating, Integer hospitalId, String city) {
+        return doctorRepository.findDoctorsByFilters(specializationId, minRating, hospitalId, city);
+    }
+
+    @Override
+    public List<Specialization> findAllSpecializations() {
+        return specializationRepository.findAll();
+    }
+
+    @Override
+    public List<String> findAllCities() {
+        return addressRepository.findAllCities();
+    }
+
+    @Override
+    public List<String> findAllCitiesWithHospitals() {
+        return hospitalRepository.findAllCitiesWithHospitals();
+    }
+
+    @Override
+    public List<Hospital> findAllHospitals() {
+        return hospitalRepository.findAll();
+    }
+
+    @Override
+    public List<Hospital> findHospitalsByCity(String city) {
+        return hospitalRepository.findHospitalsByCity(city);
+    }
 }

@@ -1,9 +1,11 @@
 package com.example.demo.controllers;
 
 import com.example.demo.dto.MedcardDTO;
+import com.example.demo.entities.Appointment;
 import com.example.demo.entities.Doctor;
 import com.example.demo.entities.Medcard;
 import com.example.demo.entities.User;
+import com.example.demo.services.AppointmentService;
 import com.example.demo.services.MedcardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import java.util.Map;
 public class PatientController {
 
     private final MedcardService medcardService;
+    private final AppointmentService appointmentService;
 
     @PostMapping("/medcard")
     public ResponseEntity<Medcard> createMedcard(@RequestBody MedcardDTO medcardDTO) {
@@ -36,4 +39,9 @@ public class PatientController {
     public ResponseEntity<Medcard> updateMedcard(@PathVariable Integer id, @RequestBody MedcardDTO medcardDTO) {
         return ResponseEntity.ok(medcardService.updateMedcard(id, medcardDTO));
     }
+    @GetMapping("/{id}/appointments")
+    public ResponseEntity<List<Appointment>> getAppointments(@PathVariable Integer id) {
+        return ResponseEntity.ok(appointmentService.findByPatientId(id));
+    }
+
 }

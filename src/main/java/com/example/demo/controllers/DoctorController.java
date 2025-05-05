@@ -1,10 +1,8 @@
 package com.example.demo.controllers;
 
 import com.example.demo.dto.DoctorDTO;
-import com.example.demo.entities.Doctor;
-import com.example.demo.entities.Hospital;
-import com.example.demo.entities.Specialization;
-import com.example.demo.entities.User;
+import com.example.demo.entities.*;
+import com.example.demo.services.AppointmentService;
 import com.example.demo.services.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +18,7 @@ import java.util.List;
 public class DoctorController {
 
     private final DoctorService doctorService;
+    private final AppointmentService appointmentService;
 
     /// TODO: Only admin could access
     @PostMapping("/create")
@@ -46,6 +45,16 @@ public class DoctorController {
         return ResponseEntity.ok(doctorService.findAllDoctors());
     }
 
+    @GetMapping("/{id}/time-slots")
+    public ResponseEntity<List<DoctorsTimeSlot>> getDoctorTimeSlots(
+            @PathVariable Integer id,
+            @RequestParam(required = false, defaultValue = "false") Boolean available) {
+        if (available) {
+            return ResponseEntity.ok(doctorService.findAvailableTimeSlotsByDoctorId(id));
+        }
+        return ResponseEntity.ok(doctorService.findAllTimeSlotsByDoctorId(id));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDoctor(@PathVariable Integer id) {
         doctorService.deleteDoctorById(id);
@@ -69,5 +78,9 @@ public class DoctorController {
             return ResponseEntity.ok(doctorService.findHospitalsByCity(city));
         }
         return ResponseEntity.ok(doctorService.findAllHospitals());
+    }
+    @GetMapping("/{id}/appointments")
+    public ResponseEntity<List<Appointment>> getAppointments(@PathVariable Integer id) {
+        return ResponseEntity.ok(appointmentService.findByDoctorId(id));
     }
 }

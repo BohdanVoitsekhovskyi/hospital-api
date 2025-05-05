@@ -12,11 +12,27 @@ const AppointmentService = {
         throw new Error('User not authenticated');
       }
 
-      // Make the API call to get appointments for the current user
-      const response = await axios.get(`${API_URL}/user/${user.id}`);
+      // Make the API call to get appointments for the current user using PatientController
+      const response = await axios.get(`/api/patients/${user.id}/appointments`);
       return response.data;
     } catch (error) {
       console.error('Error fetching appointments:', error);
+      throw error;
+    }
+  },
+
+  // Get all appointments for a doctor
+  getDoctorAppointments: async (doctorId) => {
+    try {
+      if (!doctorId) {
+        throw new Error('Doctor ID is required');
+      }
+
+      // Make the API call to get appointments for the doctor
+      const response = await axios.get(`${API_URL}/doctor/${doctorId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching doctor appointments:', error);
       throw error;
     }
   },
@@ -31,8 +47,8 @@ const AppointmentService = {
 
       // Make the API call to create a new appointment
       const response = await axios.post(API_URL, {
-        ...appointmentData,
-        patientId: user.id
+        patientId: user.id,
+        doctorTimeSlotId: appointmentData.timeSlotId
       });
 
       return response.data;
@@ -59,6 +75,26 @@ const AppointmentService = {
     }
   },
 
+  // Update appointment status (for doctors)
+  updateAppointmentStatus: async (appointmentId, status) => {
+    try {
+      if (!appointmentId) {
+        throw new Error('Appointment ID is required');
+      }
+
+      if (!status) {
+        throw new Error('Status is required');
+      }
+
+      // Make the API call to update the appointment status
+      const response = await axios.put(`${API_URL}/${appointmentId}/status`, { status });
+      return response.data;
+    } catch (error) {
+      console.error('Error updating appointment status:', error);
+      throw error;
+    }
+  },
+
   // Get available doctors
   getDoctors: async () => {
     try {
@@ -67,6 +103,22 @@ const AppointmentService = {
       return response.data;
     } catch (error) {
       console.error('Error fetching doctors:', error);
+      throw error;
+    }
+  },
+
+  // Get available time slots for a doctor
+  getAvailableTimeSlots: async (doctorId) => {
+    try {
+      if (!doctorId) {
+        throw new Error('Doctor ID is required');
+      }
+
+      // Make the API call to get available time slots for the doctor
+      const response = await axios.get(`/api/doctors/${doctorId}/time-slots?available=true`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching available time slots:', error);
       throw error;
     }
   }

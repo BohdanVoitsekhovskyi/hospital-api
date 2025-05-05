@@ -3,6 +3,7 @@ package com.example.demo.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,6 +12,7 @@ import java.time.LocalTime;
 @Setter
 @Entity
 @Table(name = "doctors_time_slots")
+@ToString
 public class DoctorsTimeSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "doctors_time_slots_id_gen")
@@ -18,7 +20,7 @@ public class DoctorsTimeSlot {
     @Column(name = "slot_id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 

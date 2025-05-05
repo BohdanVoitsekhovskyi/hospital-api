@@ -1,5 +1,6 @@
 package com.example.demo.services.implemantation;
 
+import com.example.demo.dao.PatientRepository;
 import com.example.demo.dao.UserRepository;
 import com.example.demo.dto.LoginDTO;
 import com.example.demo.dto.UserDTO;
@@ -21,6 +22,8 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private final PatientRepository patientRepository;
+
 
     @Override
     public Optional<User> register(UserDTO userDTO) {

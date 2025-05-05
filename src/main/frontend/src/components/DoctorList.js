@@ -329,14 +329,16 @@ const DoctorList = ({ onSelectDoctor }) => {
                   <div className="me-3">
                     <FaUserMd size={40} className="text-primary" />
                   </div>
-                  <div>
-                    <h6>{doctor.users.name} {doctor.users.surname}</h6>
-                    <small className="text-muted">Specialization: {doctor.specialization.specializationName}</small>
-                    {doctor.rating && (
-                      <small className="text-muted ms-3">{renderStarRating(doctor.rating)}</small>
+                  <div className="w-100">
+                    <h6 className="text-start fw-bold">{doctor.users.name} {doctor.users.surname}</h6>
+                    <small className="text-muted d-block fw-bold text-start">Specialization: {doctor.specialization.specializationName}</small>
+                    {(doctor.rating !== null && doctor.rating !== undefined) ? (
+                      <small className="text-muted d-block fw-bold text-start">Rating: {renderStarRating(doctor.rating)}</small>
+                    ) : (
+                      <small className="text-muted d-block fw-bold text-start">Rating: {renderStarRating(0)}</small>
                     )}
                     {doctor.hospital && (
-                      <small className="text-muted ms-3">Hospital: {doctor.hospital.hospitalName}</small>
+                      <small className="text-muted d-block fw-bold text-start">Hospital: {doctor.hospital.hospitalName}</small>
                     )}
                   </div>
                 </div>

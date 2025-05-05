@@ -17,7 +17,7 @@ public class Patient {
     private Integer id;
 
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
     @ColumnDefault("nextval('patients_patient_id_seq')")
     @JoinColumn(name = "patient_id", nullable = false)
     private User users;

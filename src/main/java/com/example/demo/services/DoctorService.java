@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.controllers.DoctorController;
 import com.example.demo.dto.DoctorDTO;
 import com.example.demo.entities.Doctor;
+import com.example.demo.entities.DoctorsTimeSlot;
 import com.example.demo.entities.Hospital;
 import com.example.demo.entities.Specialization;
 
@@ -14,6 +15,10 @@ public interface DoctorService {
     void deleteDoctorById(Integer id);
     List<Doctor> findAllDoctors();
     List<Doctor> findDoctorsByFilters(Integer specializationId, Double minRating, Integer hospitalId, String city);
+
+    // Methods for time slots
+    List<DoctorsTimeSlot> findAllTimeSlotsByDoctorId(Integer doctorId);
+    List<DoctorsTimeSlot> findAvailableTimeSlotsByDoctorId(Integer doctorId);
 
     // Methods for filter data
     List<Specialization> findAllSpecializations();

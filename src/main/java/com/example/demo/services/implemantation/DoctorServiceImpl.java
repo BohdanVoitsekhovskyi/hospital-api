@@ -2,11 +2,13 @@ package com.example.demo.services.implemantation;
 
 import com.example.demo.dao.AddressRepository;
 import com.example.demo.dao.DoctorRepository;
+import com.example.demo.dao.DoctorsTimeSlotRepository;
 import com.example.demo.dao.HospitalRepository;
 import com.example.demo.dao.SpecializationRepository;
 import com.example.demo.dto.DoctorDTO;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entities.Doctor;
+import com.example.demo.entities.DoctorsTimeSlot;
 import com.example.demo.entities.Hospital;
 import com.example.demo.entities.Specialization;
 import com.example.demo.services.AuthService;
@@ -26,6 +28,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final SpecializationRepository specializationRepository;
     private final AddressRepository addressRepository;
     private final HospitalRepository hospitalRepository;
+    private final DoctorsTimeSlotRepository doctorsTimeSlotRepository;
     private final AuthService authService;
 
     @Transactional
@@ -80,5 +83,16 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<Hospital> findHospitalsByCity(String city) {
         return hospitalRepository.findHospitalsByCity(city);
+    }
+
+    @Override
+    public List<DoctorsTimeSlot> findAllTimeSlotsByDoctorId(Integer doctorId) {
+        return doctorsTimeSlotRepository.findAllByDoctorId(doctorId);
+    }
+
+    @Override
+    public List<DoctorsTimeSlot> findAvailableTimeSlotsByDoctorId(Integer doctorId) {
+        System.out.println(doctorsTimeSlotRepository.findAvailableByDoctorId(doctorId));
+        return doctorsTimeSlotRepository.findAvailableByDoctorId(doctorId) ;
     }
 }

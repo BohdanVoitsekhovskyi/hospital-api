@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Tabs, Tab } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AuthService from '../services/AuthService';
 import UserProfileForm from '../components/UserProfileForm';
+import DoctorAppointmentList from '../components/DoctorAppointmentList';
 
 const DoctorDashboard = () => {
   const [user, setUser] = useState(null);
@@ -55,26 +56,24 @@ const DoctorDashboard = () => {
         </Col>
       </Row>
 
-      <Row className="mb-4">
-        <Col>
-          <Card>
-            <Card.Body>
-              <h3>Your Schedule</h3>
-              <p>This is where you'll see your upcoming appointments and schedule.</p>
-              <p className="text-muted">Coming soon: Calendar view with appointments.</p>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-
       <Row>
         <Col>
-          <Card>
-            <Card.Body>
-              <h3>Edit Profile</h3>
-              <UserProfileForm />
-            </Card.Body>
-          </Card>
+          <Tabs defaultActiveKey="appointments" className="mb-3">
+            <Tab eventKey="appointments" title="Appointments">
+              <Card>
+                <Card.Body>
+                  <DoctorAppointmentList />
+                </Card.Body>
+              </Card>
+            </Tab>
+            <Tab eventKey="profile" title="Edit Profile">
+              <Card>
+                <Card.Body>
+                  <UserProfileForm />
+                </Card.Body>
+              </Card>
+            </Tab>
+          </Tabs>
         </Col>
       </Row>
     </Container>

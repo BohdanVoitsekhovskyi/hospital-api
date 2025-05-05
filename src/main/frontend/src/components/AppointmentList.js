@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Badge, Button, Alert } from 'react-bootstrap';
+import { Table, Badge, Button, Alert, Spinner } from 'react-bootstrap';
 import AuthService from '../services/AuthService';
 import AppointmentService from '../services/AppointmentService';
 
@@ -7,6 +7,7 @@ const AppointmentList = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [cancellingId, setCancellingId] = useState(null);
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -26,28 +27,33 @@ const AppointmentList = () => {
 
   const handleCancelAppointment = async (id) => {
     try {
+      setCancellingId(id);
       // Call the service to cancel the appointment
-      await AppointmentService.cancelAppointment(id);
+      const updatedAppointment = await AppointmentService.cancelAppointment(id);
 
       // Update the local state to reflect the cancellation
       setAppointments(appointments.map(appointment => 
         appointment.id === id 
-          ? { ...appointment, status: 'CANCELLED' } 
+          ? updatedAppointment
           : appointment
       ));
+      setCancellingId(null);
     } catch (err) {
       setError('Failed to cancel appointment. Please try again.');
       console.error('Error cancelling appointment:', err);
+      setCancellingId(null);
     }
   };
 
   const getStatusBadge = (status) => {
     switch (status) {
-      case 'COMPLETED':
+      case 'FINISHED':
         return <Badge bg="success">Completed</Badge>;
-      case 'UPCOMING':
-        return <Badge bg="primary">Upcoming</Badge>;
-      case 'CANCELLED':
+      case 'PENDING':
+        return <Badge bg="primary">Pending</Badge>;
+      case 'ACCEPTED':
+        return <Badge bg="info">Accepted</Badge>;
+      case 'REJECTED':
         return <Badge bg="danger">Cancelled</Badge>;
       default:
         return <Badge bg="secondary">{status}</Badge>;
@@ -75,9 +81,9 @@ const AppointmentList = () => {
           <tr>
             <th>Doctor</th>
             <th>Specialization</th>
+            <th>Hospital</th>
             <th>Date</th>
             <th>Time</th>
-            <th>Reason</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -85,20 +91,42 @@ const AppointmentList = () => {
         <tbody>
           {appointments.map(appointment => (
             <tr key={appointment.id}>
-              <td>{appointment.doctorName}</td>
-              <td>{appointment.specialization}</td>
-              <td>{appointment.date}</td>
-              <td>{appointment.time}</td>
-              <td>{appointment.reason}</td>
+              <td>
+                {appointment.timeslot?.doctor?.users?.name} {appointment.timeslot?.doctor?.users?.surname}
+              </td>
+              <td>
+                {appointment.timeslot?.doctor?.specialization?.specializationName}
+              </td>
+              <td>
+                {appointment.timeslot?.doctor?.hospital?.hospitalName}
+              </td>
+              <td>
+                {appointment.timeslot?.date ? new Date(appointment.timeslot.date).toLocaleDateString() : 'N/A'}
+              </td>
+              <td>
+                {appointment.timeslot?.time ? appointment.timeslot.time : 'N/A'}
+              </td>
               <td>{getStatusBadge(appointment.status)}</td>
               <td>
-                {appointment.status === 'UPCOMING' && (
+                {appointment.status === 'PENDING' && (
                   <Button 
                     variant="outline-danger" 
                     size="sm"
                     onClick={() => handleCancelAppointment(appointment.id)}
+                    disabled={cancellingId === appointment.id}
                   >
-                    Cancel
+                    {cancellingId === appointment.id ? (
+                      <>
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                        <span className="visually-hidden">Cancelling...</span>
+                      </>
+                    ) : 'Cancel'}
                   </Button>
                 )}
               </td>
